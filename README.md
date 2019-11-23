@@ -27,16 +27,10 @@ The easiest way to share your Vuex Store between all processes (including main).
 
 Installation of the Vuex Electron easy as 1-2-3.
 
-1. Install package with using of [yarn](https://github.com/yarnpkg/yarn) or [npm](https://github.com/npm/cli):
+1. Install package with using of [npm](https://github.com/npm/cli):
 
     ```
-    yarn install vuex-electron
-    ```
-
-    or
-
-    ```
-    npm install vuex-electron
+    npm install git+https://github.com/tominal/vuex-electron.git
     ```
 
 2. Include plugins in your Vuex store::
@@ -52,7 +46,7 @@ Installation of the Vuex Electron easy as 1-2-3.
     export default new Vuex.Store({
       // ...
       plugins: [
-        createPersistedState(),
+        createPersistedState({ throttle: 1000 }),
         createSharedMutations()
       ],
       // ...
@@ -73,12 +67,15 @@ Installation of the Vuex Electron easy as 1-2-3.
 
 In renderer process to call actions you need to use `dispatch` or `mapActions`. Don't use `commit` because actions fired via `commit` will not be shared between processes.
 
+The ```throttle``` option was originally added by michaeljpeake and fixed by tominal. The issue arose from several random uncaught exceptions from the electron-vue repository. The persisted state is saved in several vuex-<timestamp>.json then renamed to vuex.json within the user's Electron app data folder. Windows apparently does not like several renames at once, so this is supposed to fix that.
+
 ### Options
 
 Available options for `createPersistedState()`
 
 ```javascript
 createPersistedState({
+  throttle: 0, // file rename throttle in milliseconds
   whitelist: ["whitelistedMutation", "anotherWhitelistedMutation"],
 
   // or
@@ -103,6 +100,10 @@ createPersistedState({
 
 Andrew Emelianenko  
 IG: [@truemelianenko](https://www.instagram.com/truemelianenko)
+
+michaeljpeake
+
+tominal
 
 ### License
 
