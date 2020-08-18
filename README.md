@@ -75,6 +75,7 @@ Available options for `createPersistedState()`
 
 ```javascript
 createPersistedState({
+  storageName: 'vuex.json', // file name
   throttle: 0, // file rename throttle in milliseconds
   whitelist: ["whitelistedMutation", "anotherWhitelistedMutation"],
 
